@@ -82,39 +82,32 @@ contract("Voting", accounts => {
                 VotingInstance = await Voting.new({from: owner});
             });
 
-            it("L'état par défault est bien Registering Voters", async() => {
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(0));
+            it("L'event du passage à ProposalsRegistrationStarted fonctionne", async() => {
+                const stateData1 = await VotingInstance.workflowStatus.call();
+                expect(new BN(stateData1)).to.be.bignumber.equal(new BN(0));
+
+                const stateData2 = await VotingInstance.startProposalsRegistering({from: owner});
+                expectEvent(stateData2, 'WorkflowStatusChange', {previousStatus: new BN(0) , newStatus: new BN(1)} );
             });
 
-            it("Le passage à ProposalsRegistrationStarted fonctionne", async() => {
-                await VotingInstance.startProposalsRegistering({from: owner});
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(1));
+            it("L'event du passage à ProposalsRegistrationEnded fonctionne", async() => {
+                const stateData2 = await VotingInstance.endProposalsRegistering({from: owner});
+                expectEvent(stateData2, 'WorkflowStatusChange', {previousStatus: new BN(1) , newStatus: new BN(2)} );
             });
 
-            it("Le passage à ProposalsRegistrationEnded fonctionne", async() => {
-                await VotingInstance.endProposalsRegistering({from: owner});
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(2));
+            it("L'event du passage à VotingSessionStarted fonctionne", async() => {
+                const stateData2 = await VotingInstance.startVotingSession({from: owner});
+                expectEvent(stateData2, 'WorkflowStatusChange', {previousStatus: new BN(2) , newStatus: new BN(3)} );
             });
 
-            it("Le passage à VotingSessionStarted fonctionne", async() => {
-                await VotingInstance.startVotingSession({from: owner});
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(3));
+            it("L'event du passage à VotingSessionEnded fonctionne", async() => {
+                const stateData2 = await VotingInstance.endVotingSession({from: owner});
+                expectEvent(stateData2, 'WorkflowStatusChange', {previousStatus: new BN(3) , newStatus: new BN(4)} );
             });
 
-            it("Le passage à VotingSessionEnded fonctionne", async() => {
-                await VotingInstance.endVotingSession({from: owner});
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(4));
-            });
-
-            it("Le passage à VotesTallied fonctionne", async() => {
-                await VotingInstance.tallyVotes({from: owner});
-                const stateData = await VotingInstance.workflowStatus.call();
-                expect(new BN(stateData)).to.be.bignumber.equal(new BN(5));
+            it("L'event du passage à VotesTallied fonctionne", async() => {
+                const stateData2 = await VotingInstance.tallyVotes({from: owner});
+                expectEvent(stateData2, 'WorkflowStatusChange', {previousStatus: new BN(4) , newStatus: new BN(5)} );
             });
     });
 
