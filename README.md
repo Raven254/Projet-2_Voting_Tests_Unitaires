@@ -5,6 +5,9 @@ L'objectif de ce projet est de réaliser des tests unitaires sur le contrat Voti
 + **expectRevert**  
 + **expectEvent**  
   
+    
+*19 tests ont été effectués.*    
+
 Des hooks issus de la bibliothèque de Mocha ont également été utilisés :  
 + **describe** : pour catégoriser les tests.  
 + **context** : alias de *describe*, utilisé ici pour sous-catégoriser les tests.  
