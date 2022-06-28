@@ -15,5 +15,7 @@ Des hooks issus de la bibliothèque de Mocha ont également été utilisés :
 ## Test des états : workflowStatus
 Les états ont été testés sur le fonctionnement de leurs *require*, *events* et sur le bon déroulé du changement d'états. 
 
-## Test du Whitelisting
-// En cours
+## Test du Whitelisting / Registration
+La registration a été testée dans ses 2 require, son event *VoterRegistered*, et la vérification du *whitelisting*.  
+  
+**Point d'attention** : le test de vérification du whitelisting n'a pas marché.

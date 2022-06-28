@@ -111,23 +111,39 @@ contract("Voting", accounts => {
             });
     });
 
-    //describe("Test du Whitelisting", function() {
-    //    beforeEach(async() => {
-    //        VotingInstance = await Voting.new({from: owner});
-    //    });
+    describe("Test du Registration.", function() {
+        beforeEach(async() => {
+            VotingInstance = await Voting.new({from: owner});
+            await VotingInstance.addVoter(voter1, {from: owner});
+            await VotingInstance.addVoter(voter4, {from: owner});
+            await VotingInstance.addVoter(voter5, {from: owner});
+        });
 
-    //    it("Cela devrait faire action Y", async() => {
+        it("Le require d'état fonctionne bien.", async() => {
+            await VotingInstance.startProposalsRegistering({from: owner});
+            await expectRevert(VotingInstance.addVoter(voter2, {from: owner}), "Voters registration is not open yet");
+        });
 
-    //    });
+        it("Le require d'adresse déjà whitelistée fonctionne bien.", async() => {
+            await expectRevert(VotingInstance.addVoter(voter1, {from: owner}), "Already registered");
+            await expectRevert(VotingInstance.addVoter(voter4, {from: owner}), "Already registered");
+            await expectRevert(VotingInstance.addVoter(voter5, {from: owner}), "Already registered"); 
+        });
 
-    //    it("Cela devrait faire action Z", async() => {
+        it("Le voteur ajouté est bien whitelisté.", async() => {
+            const storedData1 = await VotingInstance.voters(voter2);
+            expect(storedData1.isRegistered).to.be.false;
+            await VotingInstance.addVoter(voter2, {from: owner});
+            const storedData2 = VotingInstance.voters(voter2);
+            expect(storedData2.isRegistered).to.be.true;
 
-    //    });
+        });
 
-    //    it("Cela devrait faire action W", async() => {
-
-    //    });
-    //})
+        it("L'évènement VoterRegistered est bien émis.", async() => {
+            const storedData = await VotingInstance.addVoter(voter2, {from: owner});
+            expectEvent(storedData, "VoterRegistered", {voterAddress: voter2});
+        });
+    })
 });
 });
 })
