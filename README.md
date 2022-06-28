@@ -17,5 +17,3 @@ Les états ont été testés sur le fonctionnement de leurs *require*, *events* 
 
 ## Test du Whitelisting / Registration
 La registration a été testée dans ses 2 require, son event *VoterRegistered*, et la vérification du *whitelisting*.  
-  
-**Point d'attention** : le test de vérification du whitelisting n'a pas marché.

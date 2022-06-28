@@ -114,6 +114,7 @@ contract("Voting", accounts => {
     describe("Test du Registration.", function() {
         beforeEach(async() => {
             VotingInstance = await Voting.new({from: owner});
+            await VotingInstance.addVoter(owner, {from: owner});
             await VotingInstance.addVoter(voter1, {from: owner});
             await VotingInstance.addVoter(voter4, {from: owner});
             await VotingInstance.addVoter(voter5, {from: owner});
@@ -131,11 +132,11 @@ contract("Voting", accounts => {
         });
 
         it("Le voteur ajouté est bien whitelisté.", async() => {
-            const storedData1 = await VotingInstance.voters(voter2);
-            expect(storedData1.isRegistered).to.be.false;
+            const storedData1 = await VotingInstance.getVoter(voter2);
+            expect(storedData1.isRegistered, "storedData1 true").to.be.false;
             await VotingInstance.addVoter(voter2, {from: owner});
-            const storedData2 = VotingInstance.voters(voter2);
-            expect(storedData2.isRegistered).to.be.true;
+            const storedData2 = await VotingInstance.getVoter(voter2);
+            expect(storedData2.isRegistered, "storedData2 faux").to.be.true;
 
         });
 
@@ -146,4 +147,4 @@ contract("Voting", accounts => {
     })
 });
 });
-})
+});
